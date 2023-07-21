@@ -3,12 +3,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
-public class BACK_17144 { // 북 동 남 서
-    static int[] dx = new int[]{-1, 0, 1, 0};
-    static int[] dy = new int[]{0, 1, 0, -1};
+
+public class BACK_17144 { // 동 북 서 남
+    static int[] dx = new int[]{0, -1, 0, 1};
+    static int[] dy = new int[]{1, 0, -1, 0};
     static int R;
     static int C;
     static int T;
@@ -26,31 +25,24 @@ public class BACK_17144 { // 북 동 남 서
         }
     }
 
-    public static void cleaning(int x, int y, int dir) {
-        boolean first = false;
-        while (true) {
-            int tx = x - dx[dir];
-            int ty = y - dy[dir];
-            if (tx >= 0 && ty >= 0 && tx < R && ty < C) {
-                if (map[tx][ty] == -1 && !first) {
-                    first = true;
-                    map[x][y] = 0;
-                    tx = x + dx[dir];
-                    ty = y + dy[dir];
-                    if (tx >= 0 && ty >= 0 && tx < R && ty < C) {
-                        x = tx;
-                        y = ty;
-                    } else dir = (dir + 1) % 4;
-                } else if (map[tx][ty] == -1) break;
-                else {
-                    map[x][y] = map[tx][ty];
-                    tx = x + dx[dir];
-                    ty = y + dy[dir];
-                    if (tx >= 0 && ty >= 0 && tx < R && ty < C) {
-                        x = tx;
-                        y = ty;
-                    } else dir = (dir + 1) % 4;
+    public static void cleaning(int x, int y, int dir, int type) { // x, y는 공기청정기 시작 좌표
+        int before = map[x][y];
+        map[x][y] = 0;
+        while (map[x][y] != -1) {
+            int nx = x + dx[dir];
+            int ny = y + dy[dir];
+            if (nx >= 0 && ny >= 0 && nx < R && ny < C) {
+                if (map[nx][ny] == -1) { //// 여기
+                    break;
                 }
+                int tmp = map[nx][ny];
+                map[nx][ny] = before;
+                before = tmp;
+                x = nx;
+                y = ny;
+            } else {
+                if (dir + type < 0) dir = 3;
+                else dir = (dir + type) % 4;
             }
         }
     }
@@ -63,19 +55,27 @@ public class BACK_17144 { // 북 동 남 서
         T = inputs[2];
         map = new int[R][C];
         targets = new ArrayList<>();
+        ArrayList<int[]> cleaner = new ArrayList<>();
         for (int i = 0; i < R; i++) map[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         for (int k = 0; k < T; k++) {
             for (int i = 0; i < R; i++) {
                 for (int j = 0; j < C; j++) {
                     if (map[i][j] > 0) {
                         targets.add(new int[]{i, j, map[i][j]});
-                    }
+                    } else if (map[i][j] == -1) cleaner.add(new int[]{i, j});
                 }
             }
             for (int[] elem : targets) spread(elem[0], elem[1], elem[2] / 5);
-            cleaning(1, 0, 0);
+            cleaning(cleaner.get(0)[0], cleaner.get(0)[1] + 1, 0, 1);
+            cleaning(cleaner.get(1)[0], cleaner.get(1)[1] + 1, 0, -1);
             targets.clear();
-            for (int[] elem : map) System.out.println(Arrays.toString(elem));
         }
+        int answer = 0;
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (map[i][j] > 0) answer += map[i][j];
+            }
+        }
+        System.out.println(answer);
     }
 }
