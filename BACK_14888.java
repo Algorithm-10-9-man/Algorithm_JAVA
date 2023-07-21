@@ -15,55 +15,34 @@ public class BACK_14888 {
     static int[] nums;
     static int[] op_cnts;
     static String[] ops = new String[]{"+", "-", "*", "/"};
-    static ArrayList<String> operators;
-    static boolean[] visited;
-    public static long calc(long sum, int oper, String operator) {
-        if (operator.equals("+")) return sum + oper;
-        else if (operator.equals("-")) return sum - oper;
-        else if (operator.equals("*")) return sum * oper;
+    public static long calc(long sum, int oper, int opidx) {
+        if (opidx == 0) return sum + oper;
+        else if (opidx == 1) return sum - oper;
+        else if (opidx == 2) return sum * oper;
         else return sum / oper;
     }
+
     public static void find_sol(int depth, long sum) {
         if (depth == nums.length) {
             if (sum > max) max = sum;
             if (min > sum) min = sum;
         } else {
-            for (int j = 0; j < operators.size(); j++) {
-                if (!visited[j]) {
-                    long sub_sum = calc(sum, nums[depth], operators.get(j));
-                    visited[j] = true;
-                    find_sol( depth + 1, sub_sum);
-                    visited[j] = false;
+            for (int j = 0; j < op_cnts.length; j++) {
+                if (op_cnts[j] > 0) {
+                    op_cnts[j]--;
+                    find_sol(depth + 1, calc(sum, nums[depth], j));
+                    op_cnts[j]++;
                 }
             }
         }
     }
+
     public static void main(String[] args) throws IOException { // + - * /
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         nums = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         op_cnts = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        operators = new ArrayList<>();
-        for (int i = 0; i < op_cnts.length; i++) {
-            while (op_cnts[i] > 0) {
-                op_cnts[i]--;
-                switch (i) {
-                    case 0:
-                        operators.add("+");
-                        break;
-                    case 1:
-                        operators.add("-");
-                        break;
-                    case 2:
-                        operators.add("*");
-                        break;
-                    case 3:
-                        operators.add("/");
-                        break;
-                }
-            }
-        }
-        visited = new boolean[operators.size()];
+
         find_sol(  1, nums[0]);
         System.out.println(max);
         System.out.println(min);
