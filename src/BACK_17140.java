@@ -3,100 +3,114 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public class BACK_17140 {
-
+class BACK_17140 {
+	static class Pair implements Comparable<Pair> {
+		int number;
+		int count;
+		Pair(int n, int c) {
+			this.number = n;
+			this.count = c;
+		}
+		@Override
+		public int compareTo(Pair o) {
+			// TODO Auto-generated method stub
+			if (this.count != o.count) {
+				return Integer.compare(this.count, o.count);
+			} else {
+				return Integer.compare(this.number, o.number);
+			}
+		}
+		
+	}
+	
+	static int r, c, k;
+	static int xLength, yLength;
+	static int[][] A = new int[101][101];
 	public static void main(String[] args) throws IOException{
 		System.setIn(new FileInputStream("src/input"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int r = Integer.parseInt(st.nextToken());
-		int c = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
-		int[][] arr = new int[100][100];
-		int answer = -1;
-		for (int i = 0; i < 3; i++) {
+		r = Integer.parseInt(st.nextToken());
+		c = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
+		xLength = yLength = 3;
+		for (int i = 1; i <= xLength; i++) {
 			st = new StringTokenizer(br.readLine());
-			for (int j = 0; j < 3; j++) arr[i][j] = Integer.parseInt(st.nextToken());
+			for (int j = 1; j <= yLength; j++) {
+				A[i][j] = Integer.parseInt(st.nextToken());
+			}
 		}
-		int row = 3;
-		int col = 3;
-		Map<Integer, Integer> map = new LinkedHashMap<>();
-		for (int sec = 0; sec <= 100; sec++) {
-			if (arr[r - 1][c - 1] == k) {
-				answer = sec;
-				break;
+		System.out.println(solution());
+	}
+	
+	static int solution() {
+		for (int t = 0; t <= 100; t++) {
+			if (A[r][c] == k) {
+				return t;
 			}
-			int new_length = 0;
-			int sub_length = 0;
-			Set<Map<Integer, Integer>> entrySet = new LinkedHashSet<>();
-			if (row >= col) { //R
-				for (int i = 0; i < row; i++) {
-					map.clear();
-					for (int j = 0; j < col; j++) {
-						if (arr[i][j] != 0) {
-							if (!map.containsKey(arr[i][j])) map.put(arr[i][j], 1);
-							else map.put(arr[i][j], map.get(arr[i][j]) + 1);							
-						}
-					}
-//					entrySet.add(new LinkedHashSet<>(map));
-					sub_length = map.size() * 2;
-					if (sub_length > new_length) new_length = sub_length;
-				}
-			}
-			else { //C
-				for (int i = 0; i < col; i++) {
-					map.clear();
-					for (int j = 0; j < row; j++) {
-						if (arr[j][i] != 0) {
-							if (!map.containsKey(arr[j][i])) map.put(arr[j][i], 1);
-							else map.put(arr[j][i], map.get(arr[j][i]) + 1);							
-						}
-					}
-					entrySet.add(map);
-					sub_length = map.size() * 2;
-					if (sub_length > new_length) new_length = sub_length;
-				}
-			}
-			for (int i = 0; i < new_length; i++) {
-				for (int j = 0; j < new_length; j++) arr[i][j] = 0;
-			}
-			if (row >= col) {
-				int i, j;
-				i = j = 0;
-				for (Map<Integer, Integer> line : entrySet) {
-					System.out.println(line);
-					for (Entry<Integer, Integer> elem : line.entrySet()) {
-						if (j < arr[0].length) arr[i][j++] = elem.getKey();
-						if (j < arr[0].length) arr[i][j++] = elem.getValue();
-					}
-					i++;
-				}
-			} else {
-				int i, j;
-				i = j = 0;
-				for (Map<Integer, Integer> line : entrySet) {
-					for (Entry<Integer, Integer> elem : line.entrySet()) {
-						if (j < arr.length) arr[j++][i] = elem.getKey();
-						if (j < arr.length) arr[j++][i] = elem.getValue();
-					}
-					i++;
-				}
-			}
-			if (row >= col) col = new_length;
-			else row = new_length;
-//			for (int i = 0; i < row; i++) {
-//				for (int j = 0; j < col; j++) System.out.print(arr[i][j] + " ");
-//				System.out.println();
-//			}
-			System.out.println();
+			operating();
 		}
-		System.out.println(answer);
+		return -1;
+	}
+	
+	static void operating() {
+		if (xLength >= yLength) {
+			for (int row = 1; row <= xLength; row++) {
+				R(row);
+			}
+		} else {
+			for (int col = 1; col <= yLength; col++) {
+				C(col);
+			}
+		}
+	}
+	
+	static void R(int row) {
+		PriorityQueue<Pair> pq = new PriorityQueue<>();
+		HashMap<Integer, Integer> map = new HashMap<>(); 
+		for (int i = 1; i <= yLength; i++) {
+			if (A[row][i] != 0) {
+				map.compute(A[row][i], (key, value) -> value == null ? 1 : value + 1);
+			}
+		}
+		map.forEach((key, value) -> pq.add(new Pair(key, value)));
+		int idx = 1;
+		while (!pq.isEmpty()) {
+			Pair pair = pq.poll();
+			if (idx < A[0].length) {
+				A[row][idx++] = pair.number;
+				A[row][idx++] = pair.count;					
+			}
+		}
+		yLength = Math.max(yLength, idx);
+		while (idx <= 100) {
+			A[row][idx++] = 0;
+		}
+	}
+	
+	static void C(int col) {
+		PriorityQueue<Pair> pq = new PriorityQueue<>();
+		HashMap<Integer, Integer> map = new HashMap<>(); 
+		for (int i = 1; i <= xLength; i++) {
+			if (A[i][col] != 0) {
+				map.compute(A[i][col], (key, value) -> value == null ? 1 : value + 1);
+			}
+		}
+		map.forEach((key, value) -> pq.add(new Pair(key, value)));
+		int idx = 1;
+		while (!pq.isEmpty()) {
+			Pair pair = pq.poll(); // 조건 추가 가능
+			if (idx < A.length) {
+				A[idx++][col] = pair.number;
+				A[idx++][col] = pair.count;					
+			}
+		}
+		xLength = Math.max(xLength, idx);
+		while (idx <= 100) {
+			A[idx++][col] = 0;
+		}
 	}
 }
