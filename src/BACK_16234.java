@@ -23,7 +23,7 @@ public class BACK_16234 {
 		}
 	}
 	public static void main(String[] args) throws IOException{
-		System.setIn(new FileInputStream("src/input2"));
+//		System.setIn(new FileInputStream("src/input2"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
@@ -50,7 +50,7 @@ public class BACK_16234 {
 			// 국가 인구수 정하기
 //			for (int[] elem : A) System.out.println(Arrays.toString(elem));
 			setPopulation();
-			System.out.println();
+//			System.out.println();
 			// 국경선 다 닫기.
 			closeLine();
 //			for (boolean[] elem : visited) System.out.println(Arrays.toString(elem));
@@ -73,8 +73,8 @@ public class BACK_16234 {
 				int nx = elem.x + (bdx[i] * 2);
 				int ny = elem.y + (bdy[i] * 2);
 				if (nx >= 0 && ny >= 0 && nx < A.length && ny < A[0].length) {
-					if (!visited[elem.x + bdx[i]][elem.y + bdy[i]] && A[elem.x + bdx[i]][elem.y + bdy[i]] == 1) {
-						visited[elem.x + bdx[i]][elem.y + bdy[i]] = true;
+					if (!visited[nx][ny] && A[elem.x + bdx[i]][elem.y + bdy[i]] == 1) {
+						visited[nx][ny] = true;
 						que.add(new Cord(nx, ny));
 						arr.add(new Cord(nx, ny));
 						sub_sum += A[nx][ny];
@@ -101,8 +101,8 @@ public class BACK_16234 {
 				A[i][j] = 0;
 			}
 		}
-		for (int i = 0; i < A.length; i+=2) {
-			for (int j = 0; j < A[0].length; j+=2) visited[i][j] = false;
+		for (int i = 0; i < A.length; i++) {
+			for (int j = 0; j < A[0].length; j++) visited[i][j] = false;
 		}
 	}
 	static boolean is_poss(int nation1, int nation2) {
