@@ -1,3 +1,5 @@
+package src;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -126,4 +128,8 @@ public class BACK_16234 {
 		}
 		return is_executed;
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a0b2be2a7256179886d6ccd30bdc409fa0f18917
