@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class SWEA_8275 {
@@ -15,6 +14,7 @@ public class SWEA_8275 {
 	static int answer;
 	static int[] answer_arr;
 	static int[][] conds;
+	
 	public static void comb(int start, int depth) {
 		if (depth == N) {
 			boolean is_poss = true;
@@ -31,8 +31,8 @@ public class SWEA_8275 {
 					break;
 				}
 			}
-			if (is_poss && answer < choosed[choosed.length - 1]) {
-				answer = choosed[choosed.length - 1];
+			if (is_poss && answer < sum[sum.length - 1]) {
+				answer = sum[sum.length - 1];
 				for (int i = 0; i < choosed.length; i++) answer_arr[i] = choosed[i];
 			}
 			return ;
