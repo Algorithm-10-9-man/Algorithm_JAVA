@@ -51,11 +51,14 @@ public class BACK_17406 {
 	
 	public static void perm(int depth) {
 		if (depth == visited.length) {
+			System.out.println();
 			int[][] original = new int[array.length][array[0].length];
 			for (int i = 0; i < array.length; i++) original[i] = array[i].clone();
 			for (int i = 0; i < choosed.length; i++) {
 				int[] elem = choosed[i];
 				spin(elem[0], elem[1], elem[2], original);
+				for (int[] tar : original) System.out.println(Arrays.toString(tar));
+				System.out.println();
 			}
 			int sub_answer = getValue(original);
 			if (minA > sub_answer) minA = sub_answer;
