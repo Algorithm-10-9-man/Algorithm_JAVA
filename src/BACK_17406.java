@@ -42,23 +42,20 @@ public class BACK_17406 {
         	ArrayList<Integer> arr = groups.get(i);
         	int len = arr.size();
         	int index = len - 1;
-	    	for (int j = lu[1] - 1 + i; j <= rd[1] - 2 - i; j++, index = (index + 1) % len) array[lu[0] - 1 + i][j] = arr.get(index);
-	    	for (int j = lu[0] - 1 + i; j <= rd[0] - 2 - i; j++, index = (index + 1) % len) array[j][rd[1] - 1 - i] = arr.get(index);
-	    	for (int j = rd[1] - 1 - i; j > lu[1] - 1 + i; j--, index = (index + 1) % len) array[rd[0] - 1 - i][j] = arr.get(index);
-	    	for (int j = rd[0] - 1 - i; j > lu[0] - 1 + i; j--, index = (index + 1) % len) array[j][i + lu[1] - 1] = arr.get(index);
+	    	for (int j = lu[1] - 1 + i; j <= rd[1] - 2 - i; j++, index = (index + 1) % len) target[lu[0] - 1 + i][j] = arr.get(index);
+	    	for (int j = lu[0] - 1 + i; j <= rd[0] - 2 - i; j++, index = (index + 1) % len) target[j][rd[1] - 1 - i] = arr.get(index);
+	    	for (int j = rd[1] - 1 - i; j > lu[1] - 1 + i; j--, index = (index + 1) % len) target[rd[0] - 1 - i][j] = arr.get(index);
+	    	for (int j = rd[0] - 1 - i; j > lu[0] - 1 + i; j--, index = (index + 1) % len) target[j][i + lu[1] - 1] = arr.get(index);
         }
 	}
 	
 	public static void perm(int depth) {
-		if (depth == visited.length) {
-			System.out.println();
+		if (depth == choosed.length) {
 			int[][] original = new int[array.length][array[0].length];
 			for (int i = 0; i < array.length; i++) original[i] = array[i].clone();
 			for (int i = 0; i < choosed.length; i++) {
 				int[] elem = choosed[i];
 				spin(elem[0], elem[1], elem[2], original);
-				for (int[] tar : original) System.out.println(Arrays.toString(tar));
-				System.out.println();
 			}
 			int sub_answer = getValue(original);
 			if (minA > sub_answer) minA = sub_answer;
@@ -95,5 +92,32 @@ public class BACK_17406 {
         }
         perm(0);
         System.out.println(minA);
+	}
+	
+	private static boolean np(int[] p) { // p : 다음 순열을 원하는 기존 순열의 배열
+		// 1. 맨 뒤쪽부터 탐색하며 꼭대기 찾기
+		int N = p.length;
+		int i = N - 1;
+		while (i > 0 && p[i - 1] >= p[i]) --i;
+		if (i == 0) return false; // 다음 순열은 없음(가장 큰 순열의 형태)
+		// 2. 꼭대기 직전(i - 1) 위치에 교환 할 한 단계 큰 수 뒤쪽부터 찾기
+		int j = N - 1;
+		while (p[i - 1] >= p[j]) --j;
+		
+		// 3. 꼭대기 직전(i - 1) 위치의 수와 한 단계 큰 수를 교환하기.
+		swap(p, i - 1, j);
+		
+		// 4. 꼭대기자리부터 맨 뒤까지의 수를 오름차순의 형태로 바꿈
+		int k = N - 1;
+		while (i < k) {
+			swap(p, i++, k--);
+		}
+		return true;
+	}
+	
+	private static void swap(int[] arr, int x, int y) {
+		int temp = arr[x];
+		arr[x] = arr[y];
+		arr[y] = temp;
 	}
 }
