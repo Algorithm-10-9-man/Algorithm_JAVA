@@ -16,6 +16,5 @@ public class BACK_1931 {
 			chks[i][1] = Integer.parseInt(st.nextToken());
 		}
 		Arrays.sort(chks, (o1, o2) -> Integer.compare(o1[1], o2[1]));
-		for (int i = )
 	}
 }
