@@ -39,9 +39,9 @@ public class BACK_1753 {
 			int now = cur[0];
 			int dist = cur[1];
 			visited[now] = true;
-			for (int i = 1; i < edges[now].length; i++) {
-				if (!visited[i] && d[i] > edges[now][i] + dist) {
-					d[i] = edges[now][i] + dist;
+			for (int i = 1; i < edges.get(now).size(); i++) {
+				if (!visited[i] && d[i] > edges.get(now).get(i).weight + dist) {
+					d[i] = edges.get(now).get(i).weight + dist;
 					pq.offer(new int[] {i, d[i]});
 				}
 			}
@@ -64,7 +64,8 @@ public class BACK_1753 {
 		int E = Integer.parseInt(st.nextToken());
 		int start = Integer.parseInt(br.readLine());
 		d = new int[V + 1];
-		for (int i = 0; i < edges.size(); i++) {
+		edges = new ArrayList<>();
+		for (int i = 0; i < V + 1; i++) {
 			edges.add(new ArrayList<>());
 		}
 		for (int i = 0; i < E; i++) {
