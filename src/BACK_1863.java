@@ -1,3 +1,5 @@
+package src;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,9 +50,15 @@ public class BACK_1863 {
 							if (target > map[i]) stack.pop();
 							else break;
 						}
-						if (stack.size() == 0) {
+						if (stack.isEmpty()) { // 기존 스택에 나보다 큰 건물들만 있었을 경우.
 							stack.push(map[i]);
 							answer++;
+						} else {
+							target = stack.peek(); // 나보다 작거나 같은 건물이 있었을 경우
+							if (target < map[i]) { // 작은 건물이 있을 때만 새롭게 더해줌.
+								stack.push(map[i]);
+								answer++;
+							}
 						}
 					}
 				}
