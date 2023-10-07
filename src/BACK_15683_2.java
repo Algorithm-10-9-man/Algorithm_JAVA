@@ -1,3 +1,5 @@
+package src;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,7 +49,7 @@ public class BACK_15683_2 {
 		return cnt;
 	}
 	
-	public static int shoot(Cctv ctv, int dir, int elem, int depth) { // elemÀº °¨½Ã¿µ¿ªÀÏÁö, µÇµ¹¸±Áö.
+	public static int shoot(Cctv ctv, int dir, int elem, int depth) { // elemï¿½ï¿½ ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½.
 		int type = ctv.type;
 		int cnt = 0;
 		if (type == 1) {
@@ -77,9 +79,9 @@ public class BACK_15683_2 {
 		}
 		for (int i = 0; i < dx.length; i++) {
 			Cctv ctv = cctvs.get(depth);
-			int cnt = shoot(ctv, i, 10 + depth, 10 + depth); // °¨½Ã±¸¿ª ´Ã¸®±â
+			int cnt = shoot(ctv, i, 10 + depth, 10 + depth); // ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½
 			solution(depth + 1, subSum + cnt);
-			shoot(ctv, i, 0, 10 + depth); // µÇµ¹¸®±â
+			shoot(ctv, i, 0, 10 + depth); // ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½
 		}
 	}
 	
@@ -95,9 +97,9 @@ public class BACK_15683_2 {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if (map[i][j] > 0 && map[i][j] < 6) { // cctv À§Ä¡ ÀúÀå		
+				if (map[i][j] > 0 && map[i][j] < 6) { // cctv ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½		
 					cctvs.add(new Cctv(i, j, map[i][j]));
-				} else if (map[i][j] == 0) section++; // »ç°¢Áö´ë °³¼ö
+				} else if (map[i][j] == 0) section++; // ï¿½ç°¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			}
 		}
 		answer = section;
