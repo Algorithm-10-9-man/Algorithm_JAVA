@@ -14,6 +14,7 @@ public class BACK_2342 {
 	static int [][][] dp; // 0,0 ~ 4,4
 	static int count;
 	public static int getMPower(int start, int target) {
+		if (start == target) return 1;
 		if (start == 0) return 2; // 시작 지점에 발이 있는 경우
 		if (start == 1) {
 			if (target == 2 || target == 4) return 3;
@@ -30,33 +31,14 @@ public class BACK_2342 {
 		} else return -1;
 	}
 	
-	public static void recur(int depth, int left, int right, int subSum) {
-		count++;
-		if (depth == coms.size()) {
-			if (answer > subSum) {
-				answer = subSum;
-			}
-			return;
-		}
+	public static int recur(int depth, int left, int right) {
+		if (depth == coms.size()) return 0;
 		int target = coms.get(depth);
-		if (left == target || right == target) { // 이미 밟은 곳 밟을 때
-			if (subSum + 1 < dp[depth][left][right]) {
-				dp[depth][left][right] = subSum + 1;
-				recur(depth + 1, left, right, subSum + 1);
-			}
-		} else { // 밟지 않은 곳 밟을 때
-			int leftPower = getMPower(left, target);
-			int rightPower = getMPower(right, target);
-			if (leftPower == -1 || rightPower == -1) System.out.println("Error.");
-			if (subSum + leftPower < dp[depth][target][right]) {
-				dp[depth][target][right] = subSum + leftPower;
-				recur(depth + 1, target, right, subSum + leftPower);
-			}
-			if (subSum + rightPower < dp[depth][left][target]) {
-				dp[depth][left][target] = subSum + rightPower;
-				recur(depth + 1, left, target, subSum + rightPower);
-			}
-		}
+		if (dp[depth][left][right] != 0) return dp[depth][left][right];
+		int leftPower = recur(depth + 1, target, right) + getMPower(left, target);
+		int rightPower = recur(depth + 1, left, target) + getMPower(right, target);
+		dp[depth][left][right] = Math.min(leftPower, rightPower);
+		return dp[depth][left][right];
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -69,15 +51,7 @@ public class BACK_2342 {
 			if (elem == 0) break;
 			coms.add(elem);
 		}
-		dp = new int[coms.size() + 1][5][5];
-		for (int i = 0; i < dp.length; i++) {
-			for (int j = 0; j < dp[i].length; j++) {
-				for (int k = 0; k < dp[i][j].length; k++) dp[i][j][k] = Integer.MAX_VALUE;
-			}
-		}
-
-		answer = Integer.MAX_VALUE;
-		recur(0, 0, 0, 0);
-		System.out.println(answer + " " + count + " " + coms.size());
+		dp = new int[coms.size()][5][5];
+		System.out.println(recur(0, 0, 0));
 	}
 }

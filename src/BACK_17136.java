@@ -12,8 +12,40 @@ public class BACK_17136 {
     static int[] dy = {0, 0, 1, -1};
     static ArrayList<Integer> sizes;
     static int[] ans;
-    public static void find(int x, int y) {
-
+    static int[] cnts;
+    public static boolean makeVisited(int x, int y, int size, boolean type) {
+        for (int i = x; i < x + size; i++) {
+            for (int j = y; j < y + size; j++) {
+                if (i < 0 || j < 0 || i >= 10 || j >= 10) return false;
+                if (type && (visited[i][j] || map[i][j] <= 0)) return false;
+                visited[i][j] = type;
+            }
+        }
+        return true;
+    }
+    public static void find(int x, int y, int num, int cur, int subSum) {
+        if (cur == sizes.get(num)) {
+            if (ans[num] == 0) ans[num] = subSum;
+            else ans[num] = Math.min(ans[num], subSum);
+            return ;
+        }
+        if (y == 10) {
+            y = 0;
+            x = x + 1;
+        }
+        if (x < 0 || y < 0 || x >= 10 || y >= 10) return;
+        if (map[x][y] == num + 1) {
+            if (!visited[x][y]) {
+                for (int i = cnts.length - 1; i >= 0; i--) {
+                    if (makeVisited(x, y, i + 1, true) && cnts[i] > 0) {
+                        cnts[i]--;
+                        find(x, y + 1, num, cur + (i + 1) * (i + 1), subSum + 1);
+                        cnts[i]++;
+                    }
+                    makeVisited(x, y, i + 1, false);
+                }
+            } else find(x, y + 1, num, cur, subSum);
+        }
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -56,11 +88,12 @@ public class BACK_17136 {
             }
         }
         ans = new int[sizes.size()];
-        int answer = 0;
+        cnts = new int[]{5, 5, 5, 5, 5}; // 1 2 3 4 5
+        visited = new boolean[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (map[i][j] > 0 && ans[map[i][j] - 1] == 0) {
-                    find(i, j);
+                    find(i, j, map[i][j] - 1, 0, 0);
                     if (ans[map[i][j] - 1] == 0) {
                         System.out.println(-1);
                         return ;
@@ -68,5 +101,6 @@ public class BACK_17136 {
                 }
             }
         }
+        System.out.println(Arrays.toString(ans));
     }
 }
