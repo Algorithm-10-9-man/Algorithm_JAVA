@@ -30,7 +30,11 @@ public class BACK_23294 {
         int cur = -1;
         int nowCash = 0;
         st = new StringTokenizer(br.readLine());
+<<<<<<< HEAD
         PriorityQueue<Page> forwardMinQueue = new PriorityQueue<>(new Comparator<Page>() { // ÃÖ±Ù ÆäÀÌÁö°¡ Æ¢¾î³ª¿È
+=======
+        PriorityQueue<Page> forwardMinQueue = new PriorityQueue<>(new Comparator<Page>() { // ìµœê·¼ íŽ˜ì´ì§€ê°€ íŠ€ì–´ë‚˜ì˜´
+>>>>>>> 04d14b04dd6a9e21bbc3de79190e4f40435bee0e
             @Override
             public int compare(Page o1, Page o2) {
                 return Integer.compare(o1.time, o2.time);
@@ -42,7 +46,11 @@ public class BACK_23294 {
                 return Integer.compare(o2.time, o1.time);
             }
         });
+<<<<<<< HEAD
         PriorityQueue<Page> backwardMinQueue = new PriorityQueue<>(new Comparator<Page>() { // ÃÖ±Ù ÆäÀÌÁö°¡ Æ¢¾î³ª¿È
+=======
+        PriorityQueue<Page> backwardMinQueue = new PriorityQueue<>(new Comparator<Page>() { // ìµœê·¼ íŽ˜ì´ì§€ê°€ íŠ€ì–´ë‚˜ì˜´
+>>>>>>> 04d14b04dd6a9e21bbc3de79190e4f40435bee0e
             @Override
             public int compare(Page o1, Page o2) {
                 return Integer.compare(o1.time, o2.time);
@@ -72,7 +80,11 @@ public class BACK_23294 {
                     if (!tmp.isDeleted) nowCash -= tmp.cash;
                 }
                 nowCash += pages[num];
+<<<<<<< HEAD
                 if (cur != -1) { // Ã³À½ Á¢¼ÓÇÒ ¶§°¡ ¾Æ´Ñ °æ¿ì
+=======
+                if (cur != -1) { // ì²˜ìŒ ì ‘ì†í•  ë•Œê°€ ì•„ë‹Œ ê²½ìš°
+>>>>>>> 04d14b04dd6a9e21bbc3de79190e4f40435bee0e
                     Page page = new Page(num, pages[num], i, false);
                     backwardMaxQueue.offer(page);
                     backwardMinQueue.offer(page);
@@ -81,4 +93,8 @@ public class BACK_23294 {
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 04d14b04dd6a9e21bbc3de79190e4f40435bee0e
